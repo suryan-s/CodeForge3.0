@@ -24,3 +24,55 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Loading screen animations */
+@keyframes particle-float {
+  0% { transform: translateY(0px) translateX(0px); }
+  25% { transform: translateY(-20px) translateX(10px); }
+  50% { transform: translateY(-40px) translateX(-5px); }
+  75% { transform: translateY(-20px) translateX(-10px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+
+@keyframes glitch-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Enhanced landing page animations */
+@keyframes gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes neon-glow {
+  0%, 100% { 
+    text-shadow: 0 0 5px rgba(134, 26, 133, 0.8), 
+                 0 0 10px rgba(134, 26, 133, 0.6),
+                 0 0 15px rgba(134, 26, 133, 0.4); 
+  }
+  50% { 
+    text-shadow: 0 0 10px rgba(134, 26, 133, 1), 
+                 0 0 20px rgba(134, 26, 133, 0.8),
+                 0 0 30px rgba(134, 26, 133, 0.6); 
+  }
+}
+
+/* Utility classes */
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+.animate-float-up {
+  animation: float-up 0.8s ease-out;
+}
+
+.animate-neon-glow {
+  animation: neon-glow 2s ease-in-out infinite;
+}

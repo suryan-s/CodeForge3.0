@@ -6,6 +6,7 @@ import {
   IconUsers, 
   IconBrandGithub, 
   IconCode,
+  IconLayout2Filled,
   IconInfoCircle,
   IconMail
 } from "@tabler/icons-react"
@@ -15,6 +16,11 @@ export default function FloatingDockDemo() {
     {
       title: "Home",
       icon: <IconHome className="h-full w-full" />,
+      href: "#home",
+    },
+        {
+      title: "about",
+      icon: <IconLayout2Filled className="h-full w-full" />,
       href: "#home",
     },
     {

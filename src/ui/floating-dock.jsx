@@ -20,14 +20,17 @@ const FloatingDockMobile = ({ items, className }) => {
     <div className={cn("fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 block md:hidden", className)}>
       <motion.div 
         className="flex items-center gap-2 rounded-2xl bg-purple-900/80 backdrop-blur-lg px-4 py-3 border border-purple-500/30"
+        style={{
+          boxShadow: '0 0 20px rgba(134, 26, 133, 0.4), 0 0 40px rgba(81, 47, 141, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+        }}
       >
         {items.map((item) => (
           <a
             key={item.title}
             href={item.href}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-800/30 hover:bg-purple-700/50 transition-all border border-purple-500/30"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-800/30 hover:bg-purple-700/50 transition-all border border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/30"
           >
-            <div className="h-5 w-5 text-purple-200">
+            <div className="h-5 w-5 text-purple-200 hover:text-purple-100 transition-colors">
               {item.icon}
             </div>
           </a>
@@ -44,9 +47,12 @@ const FloatingDockDesktop = ({ items, className }) => {
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Number.POSITIVE_INFINITY)}
       className={cn(
-        "fixed top-6 left-1/2 opacity-60 transform -translate-x-1/2 z-50 hidden md:flex items-center gap-16 rounded-2xl bg-purple-900/80 backdrop-blur-lg px-4 py-3 border border-purple-500/30 shadow-2xl",
+        "fixed top-6 left-1/2 opacity-90 transform -translate-x-1/2 z-50 hidden md:flex items-center gap-16 rounded-2xl bg-purple-900/80 backdrop-blur-lg px-4 py-3 border border-purple-500/40 shadow-2xl",
         className,
       )}
+      style={{
+        boxShadow: '0 0 30px rgba(134, 26, 133, 0.5), 0 0 60px rgba(81, 47, 141, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+      }}
     >
       {items.map((item) => (
         <IconContainer mouseX={mouseX} key={item.title} {...item} />

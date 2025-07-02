@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 const LetterGlitch = ({
   glitchColors = ['#861a85', '#512f8d', '#9932cc', '#8a2be2', '#ba55d3', '#da70d6', '#dda0dd'],
@@ -242,7 +242,7 @@ const LetterGlitch = ({
   );
 };
 
-const LoadingUI = ({ duration = 5000, onComplete }) => {
+const LoadingUI = ({ duration = 5000, onComplete, isTransitioning = false }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
@@ -271,29 +271,70 @@ const LoadingUI = ({ duration = 5000, onComplete }) => {
           initial={{ opacity: 1 }}
           exit={{ 
             opacity: 0,
-            scale: 1.1,
-            filter: "blur(10px)"
+            scale: isTransitioning ? 1.2 : 1.1,
+            filter: isTransitioning ? "blur(40px)" : "blur(10px)",
+            rotateY: isTransitioning ? 15 : 0
           }}
           transition={{ 
-            duration: 1.5,
-            ease: [0.25, 0.46, 0.45, 0.94]
+            duration: isTransitioning ? 1.8 : 1.5,
+            ease: isTransitioning ? [0.25, 0.46, 0.45, 0.94] : [0.25, 0.46, 0.45, 0.94]
           }}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center"
         >
-          {/* Glitch Background */}
-          <div className="absolute inset-0">
+          {/* Glitch Background with dissolve effect */}
+          <motion.div 
+            className="absolute inset-0"
+            exit={{
+              opacity: 0,
+              scale: 1.3,
+              filter: "blur(50px) saturate(150%)"
+            }}
+            transition={{
+              duration: isTransitioning ? 2 : 1.5,
+              ease: "easeInOut"
+            }}
+          >
             <LetterGlitch />
-          </div>          {/* Loading Content */}
+          </motion.div>
+
+          {/* Loading Content with morph transition */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
+            exit={{
+              opacity: 0,
+              y: isTransitioning ? -100 : -50,
+              scale: isTransitioning ? 0.8 : 0.9,
+              rotateX: isTransitioning ? 45 : 0
+            }}
+            transition={{ 
+              delay: 0.5, 
+              duration: 0.8,
+              exit: {
+                duration: isTransitioning ? 1.2 : 0.8,
+                ease: "easeInOut"
+              }
+            }}
             className="relative z-10 flex flex-col items-center space-y-6 md:space-y-8 px-4"
-          >            {/* Main Title */}
+          >
+            {/* Main Title with morphing effect */}
             <motion.h1
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
+              exit={{
+                opacity: isTransitioning ? 0.3 : 0,
+                scale: isTransitioning ? 1.5 : 0.8,
+                y: isTransitioning ? -200 : -50,
+                filter: isTransitioning ? "blur(30px)" : "blur(10px)"
+              }}
+              transition={{ 
+                delay: 1, 
+                duration: 0.8,
+                exit: {
+                  duration: isTransitioning ? 1.5 : 0.8,
+                  ease: [0.4, 0, 0.2, 1]
+                }
+              }}
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-purple-300 text-center"
               style={{
                 textShadow: '0 0 20px rgba(134, 26, 133, 0.8), 0 0 40px rgba(81, 47, 141, 0.6)',
@@ -303,19 +344,46 @@ const LoadingUI = ({ duration = 5000, onComplete }) => {
               CODEFORGE
             </motion.h1>
 
-            {/* Subtitle */}
+            {/* Subtitle with particle dissolve */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.5, duration: 0.6 }}
+              exit={{
+                opacity: 0,
+                y: isTransitioning ? -80 : -30,
+                filter: isTransitioning ? "blur(20px)" : "blur(5px)"
+              }}
+              transition={{ 
+                delay: 1.5, 
+                duration: 0.6,
+                exit: {
+                  duration: isTransitioning ? 1 : 0.6
+                }
+              }}
               className="text-lg md:text-xl text-purple-200 text-center font-mono"
             >
               Initializing System...
-            </motion.p>            {/* Progress Bar */}
+            </motion.p>
+
+            {/* Progress Bar with transform to navigation elements */}
             <motion.div
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "100%" }}
-              transition={{ delay: 2, duration: 0.8 }}
+              exit={{
+                opacity: 0,
+                width: isTransitioning ? "200%" : "120%",
+                height: isTransitioning ? 50 : 8,
+                y: isTransitioning ? -60 : -20,
+                borderRadius: isTransitioning ? "25px" : "9999px"
+              }}
+              transition={{ 
+                delay: 2, 
+                duration: 0.8,
+                exit: {
+                  duration: isTransitioning ? 1.3 : 0.8,
+                  ease: "easeInOut"
+                }
+              }}
               className="relative h-2 bg-purple-900/50 rounded-full overflow-hidden backdrop-blur-sm w-full max-w-xs md:max-w-sm"
             >
               <motion.div
@@ -324,23 +392,56 @@ const LoadingUI = ({ duration = 5000, onComplete }) => {
                   width: `${progress}%`,
                   boxShadow: '0 0 20px rgba(134, 26, 133, 0.8)'
                 }}
-                transition={{ duration: 0.3 }}
+                exit={{
+                  background: isTransitioning ? 
+                    "linear-gradient(90deg, rgba(134,26,133,0.2), rgba(81,47,141,0.2), rgba(153,50,204,0.2))" :
+                    "linear-gradient(90deg, rgba(134,26,133,0.5), rgba(81,47,141,0.5))"
+                }}
+                transition={{ 
+                  duration: 0.3,
+                  exit: { duration: isTransitioning ? 1 : 0.5 }
+                }}
               />
             </motion.div>
 
-            {/* Progress Text */}
+            {/* Progress Text with number morph */}
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 2.5, duration: 0.6 }}
+              exit={{
+                opacity: 0,
+                scale: isTransitioning ? 2 : 0.5,
+                filter: isTransitioning ? "blur(15px)" : "blur(5px)"
+              }}
+              transition={{ 
+                delay: 2.5, 
+                duration: 0.6,
+                exit: {
+                  duration: isTransitioning ? 1.1 : 0.6
+                }
+              }}
               className="text-purple-300 font-mono text-base md:text-lg"
             >
               {Math.round(progress)}%
-            </motion.span>            {/* Animated Loading Dots */}
+            </motion.span>
+
+            {/* Animated Loading Dots with burst effect */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 3, duration: 0.6 }}
+              exit={{
+                opacity: 0,
+                scale: isTransitioning ? 3 : 0.5,
+                rotate: isTransitioning ? 360 : 0
+              }}
+              transition={{ 
+                delay: 3, 
+                duration: 0.6,
+                exit: {
+                  duration: isTransitioning ? 1.4 : 0.6,
+                  ease: "easeOut"
+                }
+              }}
               className="flex space-x-2"
             >
               {[0, 1, 2].map((i) => (
@@ -351,10 +452,18 @@ const LoadingUI = ({ duration = 5000, onComplete }) => {
                     scale: [1, 1.5, 1],
                     opacity: [0.5, 1, 0.5],
                   }}
+                  exit={{
+                    scale: isTransitioning ? [1, 3, 0] : [1, 0.5, 0],
+                    opacity: [0.5, 1, 0]
+                  }}
                   transition={{
                     duration: 1.5,
-                    repeat: Infinity,
+                    repeat: isLoading ? Infinity : 0,
                     delay: i * 0.2,
+                    exit: {
+                      duration: isTransitioning ? 1.2 : 0.8,
+                      delay: i * 0.1
+                    }
                   }}
                   style={{
                     boxShadow: '0 0 10px rgba(134, 26, 133, 0.8)'
@@ -362,11 +471,24 @@ const LoadingUI = ({ duration = 5000, onComplete }) => {
                 />
               ))}
             </motion.div>
-          </motion.div>{/* Particle Overlay */}
+          </motion.div>
+
+          {/* Particle Overlay with burst effect */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.3 }}
-            transition={{ delay: 1, duration: 2 }}
+            exit={{
+              opacity: 0,
+              scale: isTransitioning ? 2 : 1.2,
+              rotate: isTransitioning ? 45 : 0
+            }}
+            transition={{ 
+              delay: 1, 
+              duration: 2,
+              exit: {
+                duration: isTransitioning ? 1.6 : 1.2
+              }
+            }}
             className="absolute inset-0 pointer-events-none"
             style={{
               background: `
@@ -381,6 +503,17 @@ const LoadingUI = ({ duration = 5000, onComplete }) => {
               animation: 'particle-float 20s linear infinite'
             }}
           />
+
+          {/* Transition overlay for smooth blend */}
+          {isTransitioning && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-purple-800/30 to-black/40 pointer-events-none"
+            />
+          )}
         </motion.div>
       )}
     </AnimatePresence>

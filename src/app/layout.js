@@ -27,6 +27,7 @@ export default function RootLayout({ children }) {
         <Silk />
         <LoadingWrapper>
           {children}
+          
         </LoadingWrapper>
       </body>
     </html>

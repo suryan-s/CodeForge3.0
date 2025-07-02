@@ -30,14 +30,7 @@ export default function UHackathonLanding() {
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: shouldReduceMotion ? 0.2 : 0.5, delay: shouldReduceMotion ? 0 : 0.2 }}
-       
-      >
-        <FloatingDockDemo />
-      </motion.div>
+  
       
       <motion.div 
         className="relative w-full min-h-screen flex flex-col items-center justify-center px-4 md:px-6 text-white pb-20 md:pb-6 pt-20 md:pt-24"

@@ -1,7 +1,10 @@
+
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Silk from "../ui/background";
 import LoadingWrapper from "../ui/LoadingWrapper";
+import FloatingDockDemo from "../ui/floating-demo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +28,10 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Silk />
+        <FloatingDockDemo />
         <LoadingWrapper>
-          {children}
           
+          {children}
         </LoadingWrapper>
       </body>
     </html>

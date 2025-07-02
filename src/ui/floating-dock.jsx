@@ -2,16 +2,21 @@
 
 import { cn } from "../lib/utils"
 import { IconLayoutNavbarCollapse } from "@tabler/icons-react"
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion"
 
 import { useRef, useState } from "react"
 
 export const FloatingDock = ({ items, desktopClassName, mobileClassName }) => {
+  const shouldReduceMotion = useReducedMotion();
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: shouldReduceMotion ? 0.2 : 0.5, delay: shouldReduceMotion ? 0 : 0.2 }}
+    >
       <FloatingDockDesktop items={items} className={desktopClassName} />
       <FloatingDockMobile items={items} className={mobileClassName} />
-    </>
+    </motion.div>
   )
 }
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import FloatingDockDemo from '@/ui/floating-demo';
 import About from './components/about';
+import ScheduleTimeline from './components/ScheduleTimeline';
 
 export default function UHackathonLanding() {
   const shouldReduceMotion = useReducedMotion();
@@ -353,6 +354,8 @@ export default function UHackathonLanding() {
       
       {/* About Section */}
       <About />
+      {/* Schedule Timeline Section */}
+      <ScheduleTimeline />
     </>
   );
 }

@@ -203,7 +203,7 @@ export default function UHackathonLanding() {
               style={{ willChange: shouldReduceMotion ? 'auto' : 'transform' }}
             >
               <motion.button 
-                className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-lg shadow-lg transition-all transform hover:scale-105 hover:shadow-purple-500/25 hover:shadow-2xl"
+                className="group relative px-8 py-4 md:mx-0 mx-6 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-lg shadow-lg transition-all transform hover:scale-105 hover:shadow-purple-500/25 hover:shadow-2xl"
                 initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: shouldReduceMotion ? 0.3 : 0.8, delay: shouldReduceMotion ? 0.4 : 2 }}
@@ -216,7 +216,7 @@ export default function UHackathonLanding() {
               </motion.button>
               
               <motion.button 
-                className="px-8 py-4 border-2 border-purple-500 text-purple-300 hover:bg-purple-500/10 font-semibold rounded-lg transition-all transform hover:scale-105"
+                className="px-8 py-4 mx-6 border-2 border-purple-500 text-purple-300 hover:bg-purple-500/10 font-semibold rounded-lg transition-all transform hover:scale-105"
                 initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: shouldReduceMotion ? 0.3 : 0.8, delay: shouldReduceMotion ? 0.4 : 2.2 }}

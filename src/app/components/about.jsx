@@ -57,6 +57,30 @@ const scrollItems = [...pastEvents, ...pastEvents].map((event, i) => ({
 const About = () => {
   const shouldReduceMotion = useReducedMotion();
 
+  // Optimized animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: shouldReduceMotion ? 0.1 : 0.4,
+        staggerChildren: shouldReduceMotion ? 0 : 0.08
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.1 : 0.3,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <section className="relative min-h-screen bg-gradient-to-b via-purple-950/20 py-20 px-4 md:px-6 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -72,20 +96,17 @@ const About = () => {
         />
       </div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <motion.div 
+      <div className="max-w-6xl mx-auto relative z-10">        <motion.div 
           className="text-center mb-16"
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 100 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: shouldReduceMotion ? 0.3 : 1, ease: "easeOut" }}
-          viewport={{ once: true, margin: "-5%" }}
+          initial="hidden"
+          whileInView="visible"
+          variants={containerVariants}
+          viewport={{ once: true, amount: 0.3 }}
         >
           <motion.h2 
             className="text-5xl md:text-6xl font-bold mb-6"
-            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: shouldReduceMotion ? 0.3 : 1.2, delay: shouldReduceMotion ? 0 : 0.2 }}
-            viewport={{ once: true, margin: "-5%" }}
+            variants={itemVariants}
+            style={{ willChange: 'transform, opacity' }}
           >
             <span className="bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-transparent">About</span>{' '}
             <span className="text-white">CodeForge 3.0</span>
@@ -93,10 +114,10 @@ const About = () => {
 
           <motion.div 
             className="w-32 h-1 bg-gradient-to-r from-purple-500 to-purple-300 mx-auto rounded-full"
-            initial={{ width: shouldReduceMotion ? 128 : 0 }}
-            whileInView={{ width: 128 }}
-            transition={{ duration: shouldReduceMotion ? 0.3 : 1, delay: shouldReduceMotion ? 0 : 0.5 }}
-            viewport={{ once: true, margin: "-5%" }}
+            initial={{ width: 0 }}
+            whileInView={{ width: shouldReduceMotion ? 128 : 128 }}
+            transition={{ duration: shouldReduceMotion ? 0.1 : 0.4, delay: shouldReduceMotion ? 0 : 0.2 }}
+            viewport={{ once: true, amount: 0.8 }}
           />
         </motion.div>
 

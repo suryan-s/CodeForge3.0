@@ -46,68 +46,107 @@ const scheduleData = [
 export default function ScheduleTimeline() {
   const timelineRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
-  // Removed GSAP glow animation as requested
 
-  return (    <section className="w-full max-w-6xl mx-auto py-16 px-2 md:px-6">
+  // Optimized animation variants
+  const timelineVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: shouldReduceMotion ? 0.1 : 0.4,
+        staggerChildren: shouldReduceMotion ? 0 : 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: shouldReduceMotion ? 0.1 : 0.4,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  return (
+    <section className="w-full max-w-6xl mx-auto py-16 px-2 md:px-6">
       <motion.h2
         className="text-center text-4xl md:text-5xl font-bold mb-18 bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-transparent"
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: shouldReduceMotion ? 0.2 : 0.6 }}
         viewport={{ once: true }}
+        style={{ willChange: 'transform, opacity' }}
       >
         Schedule Timeline
       </motion.h2>
       
-      <div ref={timelineRef} className="relative">        {/* Mobile: Enhanced Vertical timeline */}
+      <div ref={timelineRef} className="relative">
+        {/* Mobile: Enhanced Vertical timeline */}
         <div className="block md:hidden">
           <div className="relative py-8 px-4">
             {/* Vertical line for mobile */}
             <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-500 via-purple-700 to-purple-900 rounded-full shadow-lg" />
             
-            <div className="space-y-16">
+            <motion.div 
+              className="space-y-16"
+              initial="hidden"
+              whileInView="visible"
+              variants={timelineVariants}
+              viewport={{ once: true, amount: 0.1 }}
+            >
               {scheduleData.map((item, idx) => (
                 <motion.div
                   key={item.title}
                   className="relative flex items-start"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: idx * 0.15, ease: "easeOut" }}
-                  viewport={{ once: true, amount: 0.3 }}
+                  variants={itemVariants}
+                  style={{ willChange: 'transform, opacity' }}
                 >
                   {/* Timeline dot */}
                   <motion.div
                     className="absolute left-8 -translate-x-1/2 flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400 shadow-xl border-4 border-purple-200/60 text-xl z-20"
-                    initial={{ scale: 0, rotate: -90 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    transition={{ duration: 0.6, delay: idx * 0.15, type: "spring", stiffness: 200 }}
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ 
+                      duration: shouldReduceMotion ? 0.1 : 0.3, 
+                      delay: shouldReduceMotion ? 0 : idx * 0.05,
+                      type: shouldReduceMotion ? "tween" : "spring", 
+                      stiffness: shouldReduceMotion ? 100 : 200 
+                    }}
                     viewport={{ once: true }}
+                    style={{ willChange: 'transform' }}
                   >
                     {item.icon}
-                    <motion.div
-                      className="absolute inset-0 rounded-full bg-purple-400/40 blur-lg"
-                      initial={{ opacity: 0, scale: 0.6 }}
-                      whileInView={{ opacity: 1, scale: 1.3 }}
-                      transition={{ duration: 0.8, delay: 0.2 + idx * 0.15 }}
-                    />
+                    {!shouldReduceMotion && (
+                      <motion.div
+                        className="absolute inset-0 rounded-full bg-purple-400/40 blur-lg"
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        whileInView={{ opacity: 1, scale: 1.3 }}
+                        transition={{ duration: 0.4, delay: 0.1 + idx * 0.05 }}
+                      />
+                    )}
                   </motion.div>
 
                   {/* Connector line from dot to card */}
-                  <motion.div
-                    className="absolute left-16 top-7 w-6 h-0.5 bg-gradient-to-r from-purple-500 to-transparent"
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    transition={{ duration: 0.5, delay: 0.3 + idx * 0.15 }}
-                    style={{ transformOrigin: "left" }}
-                  />
+                  {!shouldReduceMotion && (
+                    <motion.div
+                      className="absolute left-16 top-7 w-6 h-0.5 bg-gradient-to-r from-purple-500 to-transparent"
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 0.3, delay: 0.2 + idx * 0.05 }}
+                      style={{ transformOrigin: "left", willChange: 'transform' }}
+                    />
+                  )}
 
                   {/* Enhanced card for mobile */}
                   <motion.div
-                    className="ml-24 w-full max-w-sm bg-gradient-to-br from-purple-900/85 to-purple-800/65 border border-purple-500/50 rounded-2xl shadow-2xl p-6 backdrop-blur-xl hover:shadow-purple-500/50 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1"
-                    initial={{ opacity: 0, x: 30, scale: 0.95 }}
-                    whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 0.2 + idx * 0.15, ease: "easeOut" }}
-                    viewport={{ once: true }}
+                    className="ml-24 w-full max-w-sm bg-gradient-to-br from-purple-900/85 to-purple-800/65 border border-purple-500/50 rounded-2xl shadow-2xl p-6 backdrop-blur-xl hover:shadow-purple-500/50 transition-colors duration-200"
+                    whileHover={shouldReduceMotion ? {} : { scale: 1.01, y: -2 }}
+                    transition={{ duration: 0.15 }}
+                    style={{ willChange: shouldReduceMotion ? 'auto' : 'transform' }}
                   >
                     {/* Card header with enhanced styling */}
                     <div className="flex flex-col gap-3 mb-4">
@@ -129,7 +168,7 @@ export default function ScheduleTimeline() {
                   </motion.div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>{/* Desktop: Horizontal timeline with proper spacing */}
         <div className="hidden md:block">
